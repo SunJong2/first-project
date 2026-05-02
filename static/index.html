@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>날씨 앱</title>
+</head>
+<body>
+    <h1>날씨 검색</h1>
+    
+    <input type="text" id="cityInput" placeholder="도시 이름 입력 (영어)">
+    <button onclick="getWeather()">검색</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById("cityInput").value;
+            const response = await fetch(`http://localhost:8000/weather/${city}`);
+            const data = await response.json();
+            
+            document.getElementById("result").innerHTML = `
+                <p>도시: ${data.city}</p>
+                <p>날씨: ${data.desc}</p>
+                <p>온도: ${data.temp}°C (체감 ${data.feels_like}°C)</p>
+                <p>습도: ${data.humidity}%</p>
+                <p>기압: ${data.pressure}hPa</p>
+                <p>시야: ${data.visibility}km</p>
+            `;
+        }
+    </script>
+</body>
+</html>
