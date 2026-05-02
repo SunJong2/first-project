@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 import requests
 import json
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/weather/{city}")
 def get_weather(city: str):
@@ -20,4 +22,4 @@ def get_weather(city: str):
         "pressure": current["pressure"],
         "visibility": current["visibility"]
     }
-    return JSONResponse(content=result, media_type="application/json; charset=utf-8")
+    return JSONResponse(content=result, media_type="application~/json; charset=utf-8")
