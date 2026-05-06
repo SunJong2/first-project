@@ -11,6 +11,23 @@
     <button onclick="getWeather()">검색</button>
     
     <div id="result"></div>
+    <h2>최근 검색 기록</h2>
+    <div id="history"></div>
+
+    <script>
+        // 기존 getWeather 함수는 그대로 두고 아래 함수 추가
+        async function getHistory() {
+            const response = await fetch("http://localhost:8000/history");
+            const data = await response.json();
+            
+            document.getElementById("history").innerHTML = data.history
+                .map(h => `<p>${h.city} - ${h.searched_at}</p>`)
+                .join("");
+        }
+
+        // 페이지 열리면 자동으로 기록 불러오기
+        getHistory();
+    </script>
 
     <script>
         async function getWeather() {
@@ -26,6 +43,7 @@
                 <p>기압: ${data.pressure}hPa</p>
                 <p>시야: ${data.visibility}km</p>
             `;
+            getHistory();
         }
     </script>
 </body>
