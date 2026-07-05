@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>날씨 앱</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>날씨 검색</h1>
-    
-    <input type="text" id="cityInput" placeholder="도시 이름 입력 (영어)">
-    <button onclick="getWeather()">검색</button>
-    
-    <div id="result"></div>
-    <h2>최근 검색 기록</h2>
-    <div id="history"></div>
+    <div class="container">
+        <h1>🌤️ 날씨 검색</h1>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="도시 이름 입력 (영어)">
+            <button onclick="getWeather()">검색</button>
+        </div>
 
-    <script>
-        // 기존 getWeather 함수는 그대로 두고 아래 함수 추가
-        async function getHistory() {
-            const response = await fetch("http://localhost:8000/history");
-            const data = await response.json();
-            
-            document.getElementById("history").innerHTML = data.history
-                .map(h => `<p>${h.city} - ${h.searched_at}</p>`)
-                .join("");
-        }
+        <div id="result"></div>
 
-        // 페이지 열리면 자동으로 기록 불러오기
-        getHistory();
-    </script>
+        <h2>🕐 최근 검색 기록</h2>
+        <div id="history"></div>
+    </div>
 
     <script>
         async function getWeather() {
@@ -35,16 +26,29 @@
             const response = await fetch(`http://localhost:8000/weather/${city}`);
             const data = await response.json();
             
-            document.getElementById("result").innerHTML = `
-                <p>도시: ${data.city}</p>
-                <p>날씨: ${data.desc}</p>
-                <p>온도: ${data.temp}°C (체감 ${data.feels_like}°C)</p>
-                <p>습도: ${data.humidity}%</p>
-                <p>기압: ${data.pressure}hPa</p>
-                <p>시야: ${data.visibility}km</p>
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `
+                <p>🏙️ 도시: ${data.city}</p>
+                <p>🌤️ 날씨: ${data.desc}</p>
+                <p>🌡️ 온도: ${data.temp}°C (체감 ${data.feels_like}°C)</p>
+                <p>💧 습도: ${data.humidity}%</p>
+                <p>🔵 기압: ${data.pressure}hPa</p>
+                <p>👁️ 시야: ${data.visibility}km</p>
             `;
             getHistory();
         }
+
+        async function getHistory() {
+            const response = await fetch("http://localhost:8000/history");
+            const data = await response.json();
+            
+            document.getElementById("history").innerHTML = data.history
+                .map(h => `<p>📍 ${h.city} - ${h.searched_at}</p>`)
+                .join("");
+        }
+
+        getHistory();
     </script>
 </body>
 </html>
